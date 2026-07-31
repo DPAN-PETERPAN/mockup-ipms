@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integrated Performance Management System — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root{
+    --navy-900:#0a1442;
+    --navy-800:#0e1c5c;
+    --navy-700:#142878;
+    --blue-500:#3661f0;
+    --blue-100:#e7edfd;
+    --purple:#7b5cf0;
+    --purple-bg:#efeafd;
+    --green:#17b26a;
+    --green-bg:#e7f9ef;
+    --orange:#f5a524;
+    --orange-bg:#fef3e0;
+    --red:#f04438;
+    --red-bg:#fde9e7;
+    --teal:#12b3ac;
+    --teal-bg:#e3f9f7;
+    --bg:#f3f5fb;
+    --card:#ffffff;
+    --ink:#1a2149;
+    --ink-soft:#5b6280;
+    --muted:#96a0bd;
+    --border:#eaedf6;
+    --radius-lg:18px;
+    --radius-md:14px;
+    --radius-sm:10px;
+    --shadow: 0 2px 10px rgba(20,30,80,0.05), 0 1px 2px rgba(20,30,80,0.04);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand{font-family:'Plus Jakarta Sans', sans-serif;}
+  a{text-decoration:none; color:inherit;}
+  button{font-family:inherit; cursor:pointer;}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    width:250px;
+    min-width:250px;
+    background:linear-gradient(180deg, var(--navy-800) 0%, var(--navy-900) 100%);
+    display:flex;
+    flex-direction:column;
+    padding:26px 16px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .brand{
+    color:#fff;
+    font-weight:800;
+    font-size:19px;
+    line-height:1.25;
+    letter-spacing:0.2px;
+    padding:6px 10px 26px 10px;
+  }
+  .nav-section{display:flex; flex-direction:column; gap:4px; flex:1;}
+  .nav-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px;
+    border-radius:12px;
+    color:#aab2d8;
+    font-weight:600;
+    font-size:14.5px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-item .nav-left{display:flex; align-items:center; gap:11px;}
+  .nav-item svg{width:18px; height:18px; stroke-width:2.1;}
+  .nav-item:hover{background:rgba(255,255,255,0.06); color:#fff;}
+  .nav-item.active{background:#fff; color:var(--navy-800);}
+  .nav-item.active svg{stroke:var(--navy-800);}
+  .chev{transition:transform .18s ease; width:15px !important; height:15px !important;}
+  .nav-item.expanded .chev{transform:rotate(180deg);}
+  .submenu{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .22s ease;
+    display:flex;
+    flex-direction:column;
+    padding-left:14px;
+  }
+  .submenu.open{max-height:240px;}
+  .submenu a{
+    padding:9px 14px;
+    font-size:13.5px;
+    color:#8f98c2;
+    font-weight:500;
+    border-left:2px solid rgba(255,255,255,0.08);
+    margin-left:6px;
+  }
+  .submenu a:hover, .submenu a.sub-active{color:#fff; border-left:2px solid #fff;}
+  .help-btn{
+    margin-top:18px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.12);
+    color:#fff;
+    padding:12px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-weight:600;
+    font-size:14px;
+  }
+  .help-btn:hover{background:rgba(255,255,255,0.15);}
+
+  /* ===== MAIN ===== */
+  .main{flex:1; min-width:0; padding:28px 34px 60px; }
+  .topbar{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:24px;
+  }
+  .page-title h1{font-size:24px; font-weight:800; color:var(--ink);}
+  .page-title p{font-size:13.5px; color:var(--ink-soft); margin-top:4px;}
+  .top-controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .dropdown{position:relative;}
+  .dd-btn{
+    display:flex; align-items:center; gap:10px;
+    background:var(--card); border:1px solid var(--border);
+    padding:9px 14px; border-radius:11px; font-size:13px; color:var(--ink);
+    box-shadow:var(--shadow);
+    min-width:118px; justify-content:space-between;
+  }
+  .dd-btn .lbl{color:var(--muted); font-size:11px; display:block; font-weight:600;}
+  .dd-btn .val{font-weight:700; font-size:13.5px;}
+  .dd-btn svg{width:14px; height:14px; color:var(--muted);}
+  .dd-menu{
+    position:absolute; top:calc(100% + 6px); right:0; background:#fff;
+    border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 30px rgba(20,30,80,0.14);
+    min-width:160px; padding:6px; z-index:50; display:none;
+  }
+  .dd-menu.open{display:block;}
+  .dd-menu div{padding:9px 12px; border-radius:8px; font-size:13.5px; font-weight:500; color:var(--ink);}
+  .dd-menu div:hover{background:var(--blue-100); color:var(--blue-500);}
+  .search-box{
+    display:flex; align-items:center; gap:8px;
+    background:var(--card); border:1px solid var(--border);
+    padding:9px 14px; border-radius:11px; font-size:13.5px; color:var(--muted);
+    box-shadow:var(--shadow); min-width:220px;
+  }
+  .search-box svg{width:16px; height:16px;}
+  .search-box input{border:none; outline:none; font-size:13.5px; width:100%; font-family:inherit; color:var(--ink);}
+  .icon-btn{
+    position:relative; width:38px; height:38px; border-radius:11px;
+    background:var(--card); border:1px solid var(--border); box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .icon-btn svg{width:17px; height:17px; color:var(--ink-soft);}
+  .badge{
+    position:absolute; top:-5px; right:-5px; background:var(--red); color:#fff;
+    font-size:10px; font-weight:700; min-width:16px; height:16px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; padding:0 3px; border:2px solid var(--bg);
+  }
+  .profile{
+    display:flex; align-items:center; gap:9px; background:var(--card); border:1px solid var(--border);
+    padding:6px 12px 6px 6px; border-radius:11px; box-shadow:var(--shadow);
+  }
+  .avatar{width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#3661f0,#7b5cf0); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12.5px;}
+  .profile .pname{font-size:13px; font-weight:700; line-height:1.2;}
+  .profile .prole{font-size:10.5px; color:var(--muted);}
+
+  .notif-panel{
+    position:absolute; top:calc(100% + 8px); right:0; width:320px; background:#fff;
+    border:1px solid var(--border); border-radius:14px; box-shadow:0 16px 36px rgba(20,30,80,0.16);
+    padding:8px; z-index:60; display:none;
+  }
+  .notif-panel.open{display:block;}
+  .notif-head{padding:10px 10px 8px; font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;}
+  .notif-head span{font-size:11.5px; color:var(--blue-500); font-weight:600;}
+  .notif-item{display:flex; gap:10px; padding:10px; border-radius:10px;}
+  .notif-item:hover{background:var(--bg);}
+  .notif-dot{width:8px; height:8px; border-radius:50%; background:var(--red); margin-top:6px; flex-shrink:0;}
+  .notif-item .t{font-size:12.5px; font-weight:600; line-height:1.35;}
+  .notif-item .s{font-size:11px; color:var(--muted); margin-top:2px;}
+
+  /* ===== PAGES ===== */
+  .page{display:none;}
+  .page.active{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(170px,1fr));
+    gap:16px;
+    margin-bottom:18px;
+  }
+  .stat-card{
+    background:var(--card); border-radius:var(--radius-lg); padding:18px;
+    box-shadow:var(--shadow); border:1px solid var(--border);
+    display:flex; flex-direction:column; gap:10px; cursor:default;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .stat-card:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(20,30,80,0.1);}
+  .stat-top{display:flex; align-items:center; gap:10px;}
+  .stat-icon{width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .stat-icon svg{width:18px; height:18px;}
+  .stat-label{font-size:12.5px; font-weight:600; color:var(--ink-soft);}
+  .stat-value{font-size:25px; font-weight:800; letter-spacing:-0.3px;}
+  .stat-sub{font-size:11px; color:var(--green); display:flex; align-items:center; gap:4px; font-weight:600;}
+  .stat-sub svg{width:12px; height:12px;}
+  .stat-sub.down{color:var(--red);}
+  .sparkline{width:100%; height:34px;}
+
+  .grid-3{display:grid; grid-template-columns:1.1fr 1.1fr 0.9fr; gap:16px; margin-bottom:16px; align-items:stretch;}
+  .grid-2{display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; align-items:stretch;}
+  @media(max-width:1200px){.grid-3{grid-template-columns:1fr;} .grid-2{grid-template-columns:1fr;}}
+
+  .panel{
+    background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border);
+    box-shadow:var(--shadow); padding:20px; display:flex; flex-direction:column; gap:14px;
+  }
+  .panel-head{display:flex; align-items:center; justify-content:space-between;}
+  .panel-title{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:700; color:var(--ink);}
+  .panel-title svg{width:16px; height:16px;}
+  .panel-link{font-size:12px; font-weight:700; color:var(--blue-500);}
+  .panel-link:hover{text-decoration:underline;}
+
+  .subpanel-title{font-size:12px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.4px; margin-bottom:2px;}
+  .split-2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+
+  .prog-row{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .prog-row:last-child{margin-bottom:0;}
+  .prog-label{font-size:12.5px; font-weight:600; width:66px; flex-shrink:0; color:var(--ink);}
+  .prog-track{flex:1; height:8px; background:var(--bg); border-radius:20px; overflow:hidden;}
+  .prog-fill{height:100%; border-radius:20px; background:var(--blue-500);}
+  .prog-pct{font-size:12px; font-weight:700; width:36px; text-align:right; color:var(--ink-soft);}
+
+  .avg-chip{margin-top:6px; background:var(--blue-100); color:var(--blue-500); font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:10px; display:flex; justify-content:space-between;}
+
+  .donut-wrap{display:flex; align-items:center; gap:16px;}
+  .donut-canvas-box{width:110px; height:110px; position:relative; flex-shrink:0;}
+  .donut-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .donut-center b{font-size:19px;}
+  .donut-center span{font-size:9.5px; color:var(--muted); font-weight:600; text-align:center;}
+  .legend{display:flex; flex-direction:column; gap:8px;}
+  .legend-item{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:var(--ink-soft);}
+  .legend-dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+  .legend-item b{color:var(--ink); margin-left:auto; font-weight:700;}
+
+  .chart-box{height:180px;}
+
+  .unit-row{display:flex; align-items:center; gap:10px; margin-bottom:11px; font-size:12.5px;}
+  .unit-row:last-child{margin-bottom:0;}
+  .unit-name{width:80px; flex-shrink:0; color:var(--ink); font-weight:600;}
+  .unit-track{flex:1; height:7px; background:var(--bg); border-radius:20px; overflow:hidden;}
+  .unit-fill{height:100%; border-radius:20px;}
+  .unit-pct{width:32px; text-align:right; font-weight:700; color:var(--ink-soft);}
+
+  .alert-list{display:flex; flex-direction:column; gap:10px;}
+  .alert-item{
+    display:flex; gap:10px; padding:11px; border-radius:12px; background:var(--red-bg);
+    cursor:default; transition:transform .12s ease;
+  }
+  .alert-item:hover{transform:translateX(2px);}
+  .alert-item svg{width:16px; height:16px; color:var(--red); flex-shrink:0; margin-top:1px;}
+  .alert-item .t{font-size:12.5px; font-weight:700; color:#7a1f18;}
+  .alert-item .s{font-size:11px; color:#a8493f; margin-top:1px;}
+  .alert-btn{
+    margin-top:2px; background:var(--red); color:#fff; text-align:center; padding:10px;
+    border-radius:11px; font-weight:700; font-size:12.5px; border:none;
+  }
+  .alert-btn:hover{background:#d5382d;}
+
+  .out-row{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px;}
+  @media(max-width:1000px){.out-row{grid-template-columns:1fr;}}
+  .out-card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:12px;}
+  .out-head{display:flex; align-items:center; gap:11px;}
+  .out-icon{width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;}
+  .out-icon svg{width:18px; height:18px;}
+  .out-num{font-size:22px; font-weight:800;}
+  .out-cap{font-size:11.5px; color:var(--muted); font-weight:600;}
+  .mini-stats{display:flex; flex-direction:column; gap:7px;}
+  .mini-stat{display:flex; align-items:center; justify-content:space-between; font-size:12px; font-weight:600;}
+  .mini-stat .k{display:flex; align-items:center; gap:7px; color:var(--ink-soft);}
+  .dotc{width:7px; height:7px; border-radius:50%;}
+  .out-btn{margin-top:2px; background:var(--bg); text-align:center; padding:9px; border-radius:10px; font-weight:700; font-size:12.5px; color:var(--ink); border:1px solid var(--border);}
+  .out-btn:hover{background:var(--blue-100); color:var(--blue-500);}
+
+  .insight-list{display:flex; flex-direction:column; gap:4px;}
+  .insight-item{display:flex; align-items:flex-start; gap:11px; padding:12px 6px; border-bottom:1px solid var(--border); cursor:pointer;}
+  .insight-item:last-child{border-bottom:none;}
+  .insight-item:hover .t{color:var(--blue-500);}
+  .insight-item svg.chev-r{width:15px; height:15px; color:var(--muted); margin-left:auto; flex-shrink:0; margin-top:2px;}
+  .insight-icon{width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .insight-icon svg{width:15px; height:15px;}
+  .insight-item .t{font-size:12.8px; font-weight:700; line-height:1.35;}
+  .insight-item .s{font-size:11.3px; color:var(--muted); margin-top:2px;}
+
+  /* Quick actions */
+  .qa-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media(max-width:700px){.qa-grid{grid-template-columns:1fr 1fr;}}
+  .qa-btn{
+    display:flex; align-items:center; gap:11px; background:var(--card); border:1px solid var(--border);
+    padding:14px; border-radius:13px; font-weight:700; font-size:13px; color:var(--ink);
+    transition:all .15s ease;
+  }
+  .qa-btn:hover{border-color:var(--blue-500); background:var(--blue-100); transform:translateY(-2px);}
+  .qa-icon{width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .qa-icon svg{width:16px; height:16px;}
+
+  table{width:100%; border-collapse:collapse; font-size:12.8px;}
+  thead th{text-align:left; color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.3px; padding:8px 10px; border-bottom:1px solid var(--border);}
+  tbody td{padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr{transition:background .12s ease;}
+  tbody tr:hover{background:var(--bg);}
+  .doc-name{font-weight:700; color:var(--ink);}
+  .doc-unit{font-size:11px; color:var(--muted); font-weight:500;}
+  .mini-bar{width:70px; height:6px; background:var(--bg); border-radius:20px; overflow:hidden; display:inline-block; margin-right:6px; vertical-align:middle;}
+  .mini-bar-fill{height:100%; border-radius:20px; background:var(--blue-500);}
+  .pill{padding:5px 11px; border-radius:20px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:5px;}
+  .pill::before{content:''; width:6px; height:6px; border-radius:50%;}
+  .pill.on-track{background:var(--green-bg); color:var(--green);} .pill.on-track::before{background:var(--green);}
+  .pill.at-risk{background:var(--orange-bg); color:var(--orange);} .pill.at-risk::before{background:var(--orange);}
+  .pill.delayed{background:var(--red-bg); color:var(--red);} .pill.delayed::before{background:var(--red);}
+  .pill.aktif{background:var(--blue-100); color:var(--blue-500);} .pill.aktif::before{background:var(--blue-500);}
+
+  /* ===== LOGIN PAGE ===== */
+  body.locked .sidebar, body.locked .main{display:none;}
+  .login-page{display:none;}
+  body.locked .login-page{
+    display:flex;
+    width:100%;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(123,92,240,0.25), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(54,97,240,0.3), transparent 45%),
+      linear-gradient(160deg, var(--navy-900) 0%, var(--navy-800) 55%, var(--navy-700) 100%);
+    padding:20px;
+  }
+  .login-card{
+    width:100%;
+    max-width:400px;
+    background:#fff;
+    border-radius:var(--radius-lg);
+    box-shadow:0 24px 60px rgba(10,20,66,0.35);
+    padding:38px 34px 32px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .login-logo{
+    width:56px; height:56px; border-radius:16px;
+    background:linear-gradient(135deg,#3661f0,#7b5cf0);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:10px;
+  }
+  .login-logo svg{width:26px; height:26px; color:#fff;}
+  .login-brand{font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; font-size:15px; text-align:center; line-height:1.35; color:var(--ink); letter-spacing:.2px;}
+  .login-sub{font-size:12.5px; color:var(--ink-soft); text-align:center; margin-top:4px; margin-bottom:18px;}
+  .login-form{width:100%; display:flex; flex-direction:column; gap:14px;}
+  .login-field{display:flex; flex-direction:column; gap:6px;}
+  .login-field label{font-size:12px; font-weight:700; color:var(--ink);}
+  .login-input-wrap{
+    display:flex; align-items:center; gap:9px;
+    border:1.5px solid var(--border); border-radius:11px;
+    padding:11px 13px; background:var(--bg);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .login-input-wrap:focus-within{border-color:var(--blue-500); background:#fff;}
+  .login-input-wrap svg{width:16px; height:16px; color:var(--muted); flex-shrink:0;}
+  .login-input-wrap input{
+    border:none; outline:none; background:transparent; font-family:inherit;
+    font-size:13.5px; width:100%; color:var(--ink);
+  }
+  .login-toggle-eye{cursor:pointer; flex-shrink:0;}
+  .login-error{
+    display:none; align-items:center; gap:8px;
+    background:var(--red-bg); color:#b3261e; font-size:12.5px; font-weight:600;
+    padding:10px 12px; border-radius:10px;
+  }
+  .login-error.show{display:flex;}
+  .login-error svg{width:15px; height:15px; flex-shrink:0;}
+  .login-submit{
+    margin-top:4px; background:var(--blue-500); color:#fff; border:none;
+    padding:12px; border-radius:11px; font-weight:700; font-size:13.5px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:background .15s ease;
+  }
+  .login-submit:hover{background:#2a4fd6;}
+  .login-hint{margin-top:16px; font-size:11px; color:var(--muted); text-align:center; line-height:1.5;}
+  .row-chev{width:15px; height:15px; color:var(--muted);}
+
+  .ai-card{
+    background:linear-gradient(160deg, var(--navy-800), var(--navy-900));
+    border-radius:var(--radius-lg); padding:20px; color:#fff; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; gap:12px; flex:1;
+  }
+  .ai-card .glow{position:absolute; width:180px; height:180px; background:radial-gradient(circle, rgba(59,97,240,0.35), transparent 70%); top:-60px; right:-60px; border-radius:50%;}
+  .ai-head{display:flex; justify-content:space-between; align-items:center; z-index:1;}
+  .ai-head .lt{display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px;}
+  .ai-head svg{width:16px; height:16px; color:#8fb0ff;}
+  .ai-head a{font-size:11.5px; color:#9db3f5; font-weight:600;}
+  .ai-list{display:flex; flex-direction:column; gap:9px; z-index:1;}
+  .ai-item{display:flex; gap:9px; font-size:12.5px; font-weight:600; color:#dbe3fb; align-items:flex-start;}
+  .ai-item svg{width:15px; height:15px; flex-shrink:0; margin-top:1px;}
+  .ai-item.ok svg{color:var(--green);}
+  .ai-item.warn svg{color:var(--orange);}
+  .ai-bot{align-self:flex-end; width:70px; height:70px; opacity:.9; z-index:1;}
+
+  .clock{font-size:12px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px;}
+  .clock svg{width:14px; height:14px;}
+
+  ::-webkit-scrollbar{width:8px; height:8px;}
+  ::-webkit-scrollbar-thumb{background:#cfd5ea; border-radius:10px;}
+  .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);}
+
+  .toast{
+    position:fixed; bottom:26px; right:26px; background:var(--navy-900); color:#fff; padding:13px 18px;
+    border-radius:12px; font-size:13px; font-weight:600; box-shadow:0 12px 30px rgba(0,0,0,0.25);
+    display:flex; align-items:center; gap:10px; transform:translateY(20px); opacity:0; pointer-events:none;
+    transition:all .25s ease; z-index:200;
+  }
+  .toast.show{transform:translateY(0); opacity:1;}
+  .toast svg{width:16px; height:16px; color:var(--green);}
+</style>
+</head>
+<body class="locked">
+
+<!-- ============ LOGIN PAGE ============ -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-logo"><i data-lucide="shield-check"></i></div>
+    <div class="login-brand">INTEGRATED PERFORMANCE<br>MANAGEMENT SYSTEM</div>
+    <div class="login-sub">Silakan masuk untuk melanjutkan</div>
+
+    <form class="login-form" id="loginForm">
+      <div class="login-error" id="loginError">
+        <i data-lucide="alert-circle"></i>
+        <span>Username atau password salah. Silakan coba lagi.</span>
+      </div>
+
+      <div class="login-field">
+        <label for="loginUser">Username</label>
+        <div class="login-input-wrap">
+          <i data-lucide="user"></i>
+          <input type="text" id="loginUser" placeholder="Masukkan username" autocomplete="username">
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="loginPass">Password</label>
+        <div class="login-input-wrap">
+          <i data-lucide="lock"></i>
+          <input type="password" id="loginPass" placeholder="Masukkan password" autocomplete="current-password">
+          <i data-lucide="eye" class="login-toggle-eye" id="togglePass"></i>
+        </div>
+      </div>
+
+      <button type="submit" class="login-submit"><i data-lucide="log-in" style="width:15px;height:15px;"></i> Masuk</button>
+    </form>
+
+    <div class="login-hint">Gunakan kredensial yang diberikan administrator sistem<br>untuk mengakses IPMS.</div>
+  </div>
+</div>
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar">
+  <div class="brand">INTEGRATED<br>PERFORMANCE<br>MANAGEMENT<br>SYSTEM</div>
+  <nav class="nav-section" id="navSection">
+
+    <div>
+      <div class="nav-item active expanded" data-nav="dashboard" id="navDashboard">
+        <div class="nav-left"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></div>
+        <i data-lucide="chevron-down" class="chev"></i>
+      </div>
+      <div class="submenu open" id="subDashboard">
+        <a href="#" data-sub="dashboard" class="sub-active">Executive Summary</a>
+        <a href="#" data-sub="dashboard">KPI Overview</a>
+        <a href="#" data-sub="dashboard">EKB Summary</a>
+        <a href="#" data-sub="dashboard">Project Summary</a>
+        <a href="#" data-sub="dashboard">AI Insight &amp; Rekomendation</a>
+      </div>
+    </div>
+
+    <div class="nav-item" data-nav="planning" id="navPlanning">
+      <div class="nav-left"><i data-lucide="clipboard-list"></i><span>Planning</span></div>
+      <i data-lucide="chevron-down" class="chev"></i>
+    </div>
+
+    <div class="nav-item" data-nav="monitoring" id="navMonitoring">
+      <div class="nav-left"><i data-lucide="activity"></i><span>Monitoring</span></div>
+      <i data-lucide="chevron-down" class="chev"></i>
+    </div>
+
+    <div class="nav-item" data-nav="output" id="navOutput">
+      <div class="nav-left"><i data-lucide="bar-chart-3"></i><span>Performance Output</span></div>
+      <i data-lucide="chevron-down" class="chev"></i>
+    </div>
+
+    <div class="nav-item" data-nav="admin" id="navAdmin">
+      <div class="nav-left"><i data-lucide="settings"></i><span>Administration</span></div>
+      <i data-lucide="chevron-down" class="chev"></i>
+    </div>
+
+  </nav>
+  <button class="help-btn" id="helpBtn"><i data-lucide="help-circle" style="width:16px;height:16px;"></i> Bantuan</button>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="page-title">
+      <h1 id="pageTitle">Dashboard</h1>
+      <p id="pageSubtitle">Ringkasan kinerja organisasi secara menyeluruh</p>
+    </div>
+    <div class="top-controls" id="topControlsExtra">
+      <!-- Filters injected per page -->
+      <div id="filterSlot" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+
+      <div class="icon-btn" id="notifBtn" style="position:relative;">
+        <i data-lucide="bell"></i>
+        <span class="badge">8</span>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-head">Notifikasi <span>Tandai semua dibaca</span></div>
+          <div class="notif-item"><div class="notif-dot"></div><div><div class="t">12 ICK belum disubmit — Unit Operasional</div><div class="s">5 hari lalu</div></div></div>
+          <div class="notif-item"><div class="notif-dot"></div><div><div class="t">8 KPI belum memenuhi SMART-CC — Unit Keuangan</div><div class="s">3 hari lalu</div></div></div>
+          <div class="notif-item"><div class="notif-dot"></div><div><div class="t">5 proyek berstatus delay — Unit Teknologi</div><div class="s">2 hari lalu</div></div></div>
+          <div class="notif-item"><div class="notif-dot"></div><div><div class="t">4 unit memiliki EKB di bawah target</div><div class="s">1 hari lalu</div></div></div>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <div class="profile" id="profileBtn" style="cursor:pointer;">
+          <div class="avatar">SA</div>
+          <div>
+            <div class="pname">Admin</div>
+            <div class="prole">Super Admin</div>
+          </div>
+          <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--muted);"></i>
+        </div>
+        <div class="dd-menu" id="profileMenu">
+          <div id="logoutBtn" style="display:flex; align-items:center; gap:8px;"><i data-lucide="log-out" style="width:14px;height:14px;"></i> Keluar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE: DASHBOARD ================= -->
+  <section class="page active" id="page-dashboard">
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--blue-100);"><i data-lucide="clipboard-check" style="color:var(--blue-500);"></i></div><span class="stat-label">KPI Planning</span></div>
+        <div class="stat-value">92%</div>
+        <div class="stat-sub"><i data-lucide="trending-up"></i> 8% dari periode lalu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--green-bg);"><i data-lucide="target" style="color:var(--green);"></i></div><span class="stat-label">Achievement</span></div>
+        <div class="stat-value">88%</div>
+        <div class="stat-sub"><i data-lucide="trending-up"></i> 7% dari periode lalu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--purple-bg);"><i data-lucide="award" style="color:var(--purple);"></i></div><span class="stat-label">EKB Score (Jul)</span></div>
+        <div class="stat-value">91</div>
+        <div class="stat-sub"><i data-lucide="trending-up"></i> 2 poin dari periode lalu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--orange-bg);"><i data-lucide="briefcase" style="color:var(--orange);"></i></div><span class="stat-label">Project Monitoring</span></div>
+        <div class="stat-value">83%</div>
+        <div class="stat-sub"><i data-lucide="trending-up"></i> 6% dari periode lalu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--red-bg);"><i data-lucide="alert-circle" style="color:var(--red);"></i></div><span class="stat-label">Need Action</span></div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub down"><i data-lucide="trending-up"></i> 2 poin dari periode lalu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--teal-bg);"><i data-lucide="shield-check" style="color:var(--teal);"></i></div><span class="stat-label">SMART-CC Compliance</span></div>
+        <div class="stat-value">94%</div>
+        <div class="stat-sub"><i data-lucide="trending-up"></i> 1% dari periode lalu</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title"><i data-lucide="clipboard-list" style="color:var(--blue-500);"></i>Perencanaan Kinerja</div></div>
+        <div class="split-2">
+          <div>
+            <div class="subpanel-title">KPI Cascading Progress</div>
+            <div class="prog-row"><span class="prog-label">Corporate</span><div class="prog-track"><div class="prog-fill" style="width:100%;"></div></div><span class="prog-pct">100%</span></div>
+            <div class="prog-row"><span class="prog-label">Unit Kerja</span><div class="prog-track"><div class="prog-fill" style="width:85%; background:var(--teal);"></div></div><span class="prog-pct">85%</span></div>
+            <div class="prog-row"><span class="prog-label">Individu</span><div class="prog-track"><div class="prog-fill" style="width:68%; background:var(--orange);"></div></div><span class="prog-pct">68%</span></div>
+            <div class="avg-chip"><span>Rata-rata Progress</span><span>84%</span></div>
+          </div>
+          <div>
+            <div class="subpanel-title">KPI Approval Status</div>
+            <div class="donut-wrap">
+              <div class="donut-canvas-box">
+                <canvas id="donutApproval"></canvas>
+                <div class="donut-center"><b>480</b><span>Total KPI/ICK</span></div>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-dot" style="background:var(--green);"></span>Approved <b>392 (82%)</b></div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--orange);"></span>Pending <b>58 (12%)</b></div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--red);"></span>Revision <b>30 (6%)</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title"><i data-lucide="activity" style="color:var(--blue-500);"></i>Monitoring Kinerja</div></div>
+        <div class="split-2">
+          <div>
+            <div class="subpanel-title">Achievement Trend</div>
+            <div class="chart-box"><canvas id="trendChart1"></canvas></div>
+          </div>
+          <div>
+            <div class="subpanel-title">Performance by Unit</div>
+            <div class="unit-row"><span class="unit-name">SDM</span><div class="unit-track"><div class="unit-fill" style="width:92%; background:var(--green);"></div></div><span class="unit-pct">92%</span></div>
+            <div class="unit-row"><span class="unit-name">Operasional</span><div class="unit-track"><div class="unit-fill" style="width:81%; background:var(--orange);"></div></div><span class="unit-pct">81%</span></div>
+            <div class="unit-row"><span class="unit-name">Keuangan</span><div class="unit-track"><div class="unit-fill" style="width:89%; background:var(--blue-500);"></div></div><span class="unit-pct">89%</span></div>
+            <div class="unit-row"><span class="unit-name">Teknologi</span><div class="unit-track"><div class="unit-fill" style="width:96%; background:var(--teal);"></div></div><span class="unit-pct">96%</span></div>
+            <div class="unit-row"><span class="unit-name">Umum &amp; Adm.</span><div class="unit-track"><div class="unit-fill" style="width:72%; background:var(--purple);"></div></div><span class="unit-pct">72%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title" style="color:var(--red);"><i data-lucide="alert-triangle" style="color:var(--red);"></i>Need Attention (EWS)</div>
+        </div>
+        <div class="alert-list">
+          <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">12 ICK belum disubmit</div><div class="s">Unit Operasional · 5 hari</div></div></div>
+          <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">8 KPI belum memenuhi SMART-CC</div><div class="s">Unit Keuangan · 3 hari</div></div></div>
+          <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">5 proyek berstatus delay</div><div class="s">Unit Teknologi · 2 hari</div></div></div>
+          <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">4 unit memiliki EKB di bawah target</div><div class="s">Lihat detail</div></div></div>
+        </div>
+        <button class="alert-btn" onclick="showToast('Menampilkan seluruh notifikasi EWS')">Lihat Semua</button>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="subpanel-title" style="margin-left:2px;">Performance Outputs</div>
+        <div class="out-row" style="margin-bottom:0;">
+          <div class="out-card">
+            <div class="out-head">
+              <div class="out-icon" style="background:var(--blue-100);"><i data-lucide="file-text" style="color:var(--blue-500);"></i></div>
+              <div><div class="out-num">533</div><div class="out-cap">ICK Repository — ICK Aktif</div></div>
+            </div>
+            <div class="mini-stats">
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--green);"></span>Approved</span><span>480</span></div>
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--blue-500);"></span>Draft</span><span>42</span></div>
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--orange);"></span>Revision</span><span>11</span></div>
+            </div>
+            <button class="out-btn" onclick="goPage('output')">Lihat Detail</button>
+          </div>
+
+          <div class="out-card">
+            <div class="out-head">
+              <div class="out-icon" style="background:var(--purple-bg);"><i data-lucide="bar-chart-2" style="color:var(--purple);"></i></div>
+              <div><div class="out-num">91</div><div class="out-cap">EKB Bulanan (Jul) — Rata-rata Skor</div></div>
+            </div>
+            <div class="mini-stats">
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--green);"></span>Submitted</span><span>94%</span></div>
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--orange);"></span>Outstanding</span><span>27</span></div>
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--red);"></span>Below Target</span><span>4 Unit</span></div>
+            </div>
+            <button class="out-btn" onclick="goPage('output')">Lihat EKB</button>
+          </div>
+
+          <div class="out-card">
+            <div class="out-head">
+              <div class="out-icon" style="background:var(--orange-bg);"><i data-lucide="folder-kanban" style="color:var(--orange);"></i></div>
+              <div><div class="out-num">83%</div><div class="out-cap">Monitoring Proyek — Proyek On Track</div></div>
+            </div>
+            <div class="mini-stats">
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--green);"></span>On Track</span><span>83%</span></div>
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--orange);"></span>Delayed</span><span>12%</span></div>
+              <div class="mini-stat"><span class="k"><span class="dotc" style="background:var(--red);"></span>Critical</span><span>5%</span></div>
+            </div>
+            <button class="out-btn" onclick="goPage('monitoring')">Lihat Proyek</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title"><i data-lucide="sparkles" style="color:var(--purple);"></i>Insight &amp; Recommendation</div></div>
+        <div class="insight-list">
+          <div class="insight-item" onclick="showToast('Membuka daftar 12 karyawan')">
+            <div class="insight-icon" style="background:var(--orange-bg);"><i data-lucide="alert-triangle" style="color:var(--orange);"></i></div>
+            <div><div class="t">12 karyawan belum menyelesaikan KPI Planning</div><div class="s">Segera lakukan tindak lanjut agar target tercapai</div></div>
+            <i data-lucide="chevron-right" class="chev-r"></i>
+          </div>
+          <div class="insight-item" onclick="showToast('Membuka detail Divisi Operations')">
+            <div class="insight-icon" style="background:var(--orange-bg);"><i data-lucide="alert-triangle" style="color:var(--orange);"></i></div>
+            <div><div class="t">Divisi Operations memiliki completion rate terendah (72%)</div><div class="s">Dibandingkan rata-rata perusahaan 92%</div></div>
+            <i data-lucide="chevron-right" class="chev-r"></i>
+          </div>
+          <div class="insight-item" onclick="showToast('Menampilkan tren pencapaian korporat')">
+            <div class="insight-icon" style="background:var(--green-bg);"><i data-lucide="check-circle-2" style="color:var(--green);"></i></div>
+            <div><div class="t">Pencapaian korporat meningkat 8% dibanding periode lalu</div><div class="s">Pertahankan momentum positif ini</div></div>
+            <i data-lucide="chevron-right" class="chev-r"></i>
+          </div>
+          <div class="insight-item" onclick="showToast('Membuka talent pool')">
+            <div class="insight-icon" style="background:var(--purple-bg);"><i data-lucide="star" style="color:var(--purple);"></i></div>
+            <div><div class="t">3 karyawan layak masuk talent pool</div><div class="s">Berdasarkan konsistensi kinerja dan potensi yang menonjol</div></div>
+            <i data-lucide="chevron-right" class="chev-r"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= PAGE: PLANNING ================= -->
+  <section class="page" id="page-planning">
+
+    <div class="stat-row" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));">
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--blue-100);"><i data-lucide="file-text" style="color:var(--blue-500);"></i></div><span class="stat-label">Draft ICK</span></div>
+        <div class="stat-value">8</div>
+        <div class="stat-sub" style="color:var(--muted);">Dokumen</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--orange-bg);"><i data-lucide="users" style="color:var(--orange);"></i></div><span class="stat-label">SMART-C Compliance</span></div>
+        <div class="stat-value">75%</div>
+        <div class="stat-sub" style="color:var(--muted);">(6 dari 8)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--red-bg);"><i data-lucide="alert-triangle" style="color:var(--red);"></i></div><span class="stat-label">Approval</span></div>
+        <div class="stat-value">5</div>
+        <div class="stat-sub" style="color:var(--muted);">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--purple-bg);"><i data-lucide="star" style="color:var(--purple);"></i></div><span class="stat-label">Disetujui</span></div>
+        <div class="stat-value">10</div>
+        <div class="stat-sub" style="color:var(--muted);">Published</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title"><i data-lucide="zap" style="color:var(--blue-500);"></i>Quick Action</div></div>
+          <div class="qa-grid">
+            <button class="qa-btn" onclick="showToast('Membuka Panduan Pengisian')"><div class="qa-icon" style="background:var(--blue-100);"><i data-lucide="book-open" style="color:var(--blue-500);"></i></div>Panduan Pengisian</button>
+            <button class="qa-btn" onclick="showToast('Membuka Rencana Tahunan Satker')"><div class="qa-icon" style="background:var(--purple-bg);"><i data-lucide="calendar" style="color:var(--purple);"></i></div>Rencana Tahunan Satker</button>
+            <button class="qa-btn" onclick="showToast('Membuka Rencana Kerja')"><div class="qa-icon" style="background:var(--teal-bg);"><i data-lucide="briefcase" style="color:var(--teal);"></i></div>Rencana Kerja</button>
+            <button class="qa-btn" onclick="showToast('Form Buat ICK Baru dibuka')"><div class="qa-icon" style="background:var(--green-bg);"><i data-lucide="plus-circle" style="color:var(--green);"></i></div>Buat ICK Baru</button>
+            <button class="qa-btn" onclick="showToast('Membuka SMART-C Review')"><div class="qa-icon" style="background:var(--orange-bg);"><i data-lucide="check-square" style="color:var(--orange);"></i></div>SMART-C Review</button>
+            <button class="qa-btn" onclick="showToast('Membuka daftar Approval')"><div class="qa-icon" style="background:var(--blue-100);"><i data-lucide="user-check" style="color:var(--blue-500);"></i></div>Approval</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title"><i data-lucide="folder" style="color:var(--blue-500);"></i>Dokumen Saya</div><a class="panel-link" onclick="showToast('Menampilkan semua dokumen')">Lihat Semua</a></div>
+          <table>
+            <thead><tr><th>Dokumen</th><th>Target</th><th>Bobot</th><th>SMART-CC</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><div class="doc-name">Ketepatan Penyelesaian Laporan</div><div class="doc-unit">Operasional</div></td><td>95%</td><td>15%</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:92%;"></div></div>92%</td><td><span class="pill aktif">Aktif</span></td><td><i data-lucide="chevron-right" class="row-chev"></i></td></tr>
+              <tr><td><div class="doc-name">Kualitas Layanan Pelanggan</div><div class="doc-unit">Operasional</div></td><td>90%</td><td>20%</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:94%;"></div></div>94%</td><td><span class="pill aktif">Aktif</span></td><td><i data-lucide="chevron-right" class="row-chev"></i></td></tr>
+              <tr><td><div class="doc-name">Efisiensi Proses Bisnis</div><div class="doc-unit">Operasional</div></td><td>85%</td><td>15%</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:90%;"></div></div>90%</td><td><span class="pill aktif">Aktif</span></td><td><i data-lucide="chevron-right" class="row-chev"></i></td></tr>
+              <tr><td><div class="doc-name">Peningkatan Kompetensi SDM</div><div class="doc-unit">SDM</div></td><td>80%</td><td>15%</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:97%;"></div></div>97%</td><td><span class="pill aktif">Aktif</span></td><td><i data-lucide="chevron-right" class="row-chev"></i></td></tr>
+              <tr><td><div class="doc-name">Kepatuhan Regulasi</div><div class="doc-unit">Umum &amp; Administrasi</div></td><td>100%</td><td>10%</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:93%;"></div></div>93%</td><td><span class="pill aktif">Aktif</span></td><td><i data-lucide="chevron-right" class="row-chev"></i></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title" style="color:var(--red);"><i data-lucide="alert-triangle" style="color:var(--red);"></i>Need Your Attention</div><a class="panel-link" onclick="showToast('Menampilkan semua peringatan')">Lihat Semua</a></div>
+          <div class="alert-list">
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">12 ICK belum disubmit</div><div class="s">Unit Operasional · Terlambat 5 hari</div></div></div>
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">8 KPI perlu revisi SMART-CC</div><div class="s">Unit Keuangan · Terlambat 3 hari</div></div></div>
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">4 KPI belum memiliki target</div><div class="s">Unit Umum &amp; Administrasi · Terlambat 1 hari</div></div></div>
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">Dokumen pendukung belum lengkap</div><div class="s">Unit SDM · Terlambat 2 hari</div></div></div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="glow"></div>
+          <div class="ai-head"><div class="lt"><i data-lucide="sparkles"></i>AI Recommendation</div><a onclick="showToast('Menampilkan semua rekomendasi AI')">Lihat Semua</a></div>
+          <div class="ai-list">
+            <div class="ai-item ok"><i data-lucide="check-circle-2"></i>5 draft siap diajukan</div>
+            <div class="ai-item warn"><i data-lucide="alert-triangle"></i>2 draft perlu revisi indikator</div>
+            <div class="ai-item warn"><i data-lucide="alert-triangle"></i>1 target belum memenuhi SMART-C</div>
+            <div class="ai-item warn"><i data-lucide="alert-triangle"></i>3 draft perlu revisi indicator dan target</div>
+          </div>
+          <svg class="ai-bot" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#16225e"/><rect x="7" y="8" width="10" height="8" rx="3" fill="#5b8dfd"/><circle cx="9.5" cy="12" r="1.2" fill="#fff"/><circle cx="14.5" cy="12" r="1.2" fill="#fff"/><rect x="10.5" y="3" width="3" height="4" rx="1.2" fill="#5b8dfd"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= PAGE: MONITORING ================= -->
+  <section class="page" id="page-monitoring">
+
+    <div class="stat-row" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));">
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--purple-bg);"><i data-lucide="star" style="color:var(--purple);"></i></div><span class="stat-label">IKU Update</span></div>
+        <div class="stat-value">83%</div>
+        <div class="stat-sub" style="color:var(--muted);">Realisasi IKU</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--green-bg);"><i data-lucide="check-circle" style="color:var(--green);"></i></div><span class="stat-label">ICK Update</span></div>
+        <div class="stat-value">75%</div>
+        <div class="stat-sub" style="color:var(--muted);">Realisasi ICK</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--orange-bg);"><i data-lucide="folder-kanban" style="color:var(--orange);"></i></div><span class="stat-label">Monitoring Proyek</span></div>
+        <div class="stat-value">71%</div>
+        <div class="stat-sub" style="color:var(--muted);">Proyek On Track</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon" style="background:var(--red-bg);"><i data-lucide="alert-circle" style="color:var(--red);"></i></div><span class="stat-label">Need Action</span></div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub" style="color:var(--muted);">Pending</div>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:flex-end; padding:6px 4px;">
+        <div class="clock"><i data-lucide="clock"></i> Last Update: <span id="lastUpdate">27 Juli 2026, 08.30 WIB</span></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="panel-head"><div class="panel-title"><i data-lucide="zap" style="color:var(--blue-500);"></i>Quick Action</div></div>
+      <div class="qa-grid">
+        <button class="qa-btn" onclick="showToast('Membuka form Update Realisasi IKU')"><div class="qa-icon" style="background:var(--purple-bg);"><i data-lucide="star" style="color:var(--purple);"></i></div>Update Realisasi IKU</button>
+        <button class="qa-btn" onclick="showToast('Membuka form Update Realisasi ICK')"><div class="qa-icon" style="background:var(--green-bg);"><i data-lucide="check-circle" style="color:var(--green);"></i></div>Update Realisasi ICK</button>
+        <button class="qa-btn" onclick="showToast('Membuka Upload Evidence')"><div class="qa-icon" style="background:var(--blue-100);"><i data-lucide="upload" style="color:var(--blue-500);"></i></div>Upload Evidence</button>
+        <button class="qa-btn" onclick="goPage('output')"><div class="qa-icon" style="background:var(--orange-bg);"><i data-lucide="folder-kanban" style="color:var(--orange);"></i></div>Monitoring Proyek</button>
+        <button class="qa-btn" onclick="showToast('Membuka EWS Review')"><div class="qa-icon" style="background:var(--red-bg);"><i data-lucide="shield-alert" style="color:var(--red);"></i></div>EWS Review</button>
+        <button class="qa-btn" onclick="showToast('Laporan sedang dibuat...')"><div class="qa-icon" style="background:var(--teal-bg);"><i data-lucide="file-output" style="color:var(--teal);"></i></div>Generate Report</button>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title"><i data-lucide="list-checks" style="color:var(--blue-500);"></i>ICK Saya</div><a class="panel-link" onclick="showToast('Menampilkan semua ICK')">Lihat Semua</a></div>
+          <table>
+            <thead><tr><th>ICK</th><th>Target</th><th>Aktual</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="doc-name">Ketepatan Penyelesaian Laporan</td><td>95%</td><td>92%</td><td><span class="pill on-track">On Track</span></td></tr>
+              <tr><td class="doc-name">Kualitas Pelayanan</td><td>90%</td><td>87%</td><td><span class="pill at-risk">At Risk</span></td></tr>
+              <tr><td class="doc-name">Pengembangan Kompetensi SDM</td><td>80%</td><td>65%</td><td><span class="pill delayed">Need Action</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title" style="color:var(--red);"><i data-lucide="alert-triangle" style="color:var(--red);"></i>Need Your Attention</div><a class="panel-link" onclick="showToast('Menampilkan semua peringatan')">Lihat Semua</a></div>
+          <div class="alert-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">3 KPI belum diperbarui &gt;14 hari</div></div></div>
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">2 proyek terlambat</div></div></div>
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">4 evidence belum diunggah</div></div></div>
+            <div class="alert-item"><i data-lucide="alert-triangle"></i><div><div class="t">1 KPI berisiko gagal</div></div></div>
+            <div class="alert-item" style="grid-column:1/-1;"><i data-lucide="alert-triangle"></i><div><div class="t">2 unit mengalami penurunan capaian</div></div></div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="glow"></div>
+          <div class="ai-head"><div class="lt"><i data-lucide="sparkles"></i>AI Recommendation</div><a onclick="showToast('Menampilkan semua rekomendasi AI')">Lihat Semua</a></div>
+          <div class="ai-list">
+            <div class="ai-item ok"><i data-lucide="check-circle-2"></i>5 KPI mencapai target</div>
+            <div class="ai-item warn"><i data-lucide="alert-triangle"></i>2 KPI berisiko tidak tercapai</div>
+            <div class="ai-item warn"><i data-lucide="alert-triangle"></i>1 proyek mengalami deviasi jadwal</div>
+            <div class="ai-item warn"><i data-lucide="alert-triangle"></i>4 evidence perlu dilengkapi</div>
+          </div>
+          <p style="font-size:11.5px; color:#aeb9e6; z-index:1; line-height:1.5;">Fokus pada Unit Operasional karena memiliki indikator risiko terbanyak …</p>
+          <svg class="ai-bot" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#16225e"/><rect x="7" y="8" width="10" height="8" rx="3" fill="#5b8dfd"/><circle cx="9.5" cy="12" r="1.2" fill="#fff"/><circle cx="14.5" cy="12" r="1.2" fill="#fff"/><rect x="10.5" y="3" width="3" height="4" rx="1.2" fill="#5b8dfd"/></svg>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title"><i data-lucide="line-chart" style="color:var(--blue-500);"></i>Monitoring Kinerja</div></div>
+          <div class="subpanel-title">Achievement Trend</div>
+          <div class="chart-box"><canvas id="trendChart2"></canvas></div>
+          <div class="subpanel-title" style="margin-top:6px;">Performance by Unit</div>
+          <div class="unit-row"><span class="unit-name">SDM</span><div class="unit-track"><div class="unit-fill" style="width:92%; background:var(--green);"></div></div><span class="unit-pct">92%</span></div>
+          <div class="unit-row"><span class="unit-name">Operasional</span><div class="unit-track"><div class="unit-fill" style="width:81%; background:var(--orange);"></div></div><span class="unit-pct">81%</span></div>
+          <div class="unit-row"><span class="unit-name">Keuangan</span><div class="unit-track"><div class="unit-fill" style="width:85%; background:var(--blue-500);"></div></div><span class="unit-pct">85%</span></div>
+          <div class="unit-row"><span class="unit-name">Teknologi</span><div class="unit-track"><div class="unit-fill" style="width:90%; background:var(--teal);"></div></div><span class="unit-pct">90%</span></div>
+          <div class="unit-row"><span class="unit-name">Umum &amp; Adm.</span><div class="unit-track"><div class="unit-fill" style="width:72%; background:var(--purple);"></div></div><span class="unit-pct">72%</span></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title"><i data-lucide="folder-kanban" style="color:var(--blue-500);"></i>Monitoring Proyek</div><a class="panel-link" onclick="goPage('output')">Lihat Semua Proyek</a></div>
+          <table>
+            <thead><tr><th>Nama Proyek</th><th>Progress</th><th>Status</th><th>Target Selesai</th></tr></thead>
+            <tbody>
+              <tr><td class="doc-name">Digitalisasi Arsip</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:83%; background:var(--green);"></div></div>83%</td><td><span class="pill on-track">On Track</span></td><td>30 Sep 2027</td></tr>
+              <tr><td class="doc-name">Implementasi ERP</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:75%; background:var(--orange);"></div></div>75%</td><td><span class="pill at-risk">At Risk</span></td><td>31 Oct 2027</td></tr>
+              <tr><td class="doc-name">Modernisasi Layanan SDM</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:91%; background:var(--green);"></div></div>91%</td><td><span class="pill on-track">On Track</span></td><td>15 Sep 2027</td></tr>
+              <tr><td class="doc-name">Integrasi Data Korerja</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:52%; background:var(--red);"></div></div>52%</td><td><span class="pill delayed">Delayed</span></td><td>31 Sep 2027</td></tr>
+              <tr><td class="doc-name">Pengembangan Portal Internal</td><td><div class="mini-bar"><div class="mini-bar-fill" style="width:68%; background:var(--orange);"></div></div>68%</td><td><span class="pill at-risk">At Risk</span></td><td>30 Sep 2027</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= PAGE: OUTPUT / ADMIN (placeholder) ================= -->
+  <section class="page" id="page-output">
+    <div class="panel" style="align-items:center; text-align:center; padding:60px 20px;">
+      <div class="stat-icon" style="background:var(--blue-100); width:56px; height:56px; margin:0 auto;"><i data-lucide="bar-chart-3" style="width:26px; height:26px; color:var(--blue-500);"></i></div>
+      <h2 style="margin-top:14px; font-size:18px;">Performance Output</h2>
+      <p style="color:var(--ink-soft); font-size:13.5px; max-width:420px; margin-top:6px;">Halaman ini menampilkan detail ICK Repository, EKB Bulanan, dan Monitoring Proyek secara lengkap. Bagian ini masih dalam pengembangan pada mockup ini.</p>
+    </div>
+  </section>
+
+  <section class="page" id="page-admin">
+    <div class="panel" style="align-items:center; text-align:center; padding:60px 20px;">
+      <div class="stat-icon" style="background:var(--purple-bg); width:56px; height:56px; margin:0 auto;"><i data-lucide="settings" style="width:26px; height:26px; color:var(--purple);"></i></div>
+      <h2 style="margin-top:14px; font-size:18px;">Administration</h2>
+      <p style="color:var(--ink-soft); font-size:13.5px; max-width:420px; margin-top:6px;">Pengaturan pengguna, hak akses, dan konfigurasi master data organisasi. Bagian ini masih dalam pengembangan pada mockup ini.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"><i data-lucide="check-circle"></i><span id="toastMsg">Aksi berhasil dijalankan</span></div>
+
+<script>
+lucide.createIcons();
+
+/* ---------- LOGIN ---------- */
+const VALID_USERNAME = 'Admin';
+const VALID_PASSWORD = 'DPAN2026';
+
+const loginForm = document.getElementById('loginForm');
+const loginUser = document.getElementById('loginUser');
+const loginPass = document.getElementById('loginPass');
+const loginError = document.getElementById('loginError');
+const togglePass = document.getElementById('togglePass');
+
+loginForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const u = loginUser.value.trim();
+  const p = loginPass.value;
+  if(u === VALID_USERNAME && p === VALID_PASSWORD){
+    loginError.classList.remove('show');
+    document.body.classList.remove('locked');
+    loginForm.reset();
+    showToast('Login berhasil. Selamat datang, Admin!');
+  } else {
+    loginError.classList.add('show');
+  }
+});
+
+togglePass.addEventListener('click', ()=>{
+  const isPw = loginPass.type === 'password';
+  loginPass.type = isPw ? 'text' : 'password';
+  togglePass.setAttribute('data-lucide', isPw ? 'eye-off' : 'eye');
+  lucide.createIcons();
+});
+
+/* ---------- PAGE NAVIGATION ---------- */
+const pages = {
+  dashboard: {title:'Dashboard', sub:'Ringkasan kinerja organisasi secara menyeluruh', filters:['Tahun 2026','Periode Q3 (Jul - Sep)','Unit Semua Unit','Status Semua Status','Filter Lainnya'], search:false},
+  planning:  {title:'Planning', sub:'Perencanaan Kinerja & KPI Management', filters:['Tahun 2027','Periode Tahunan','Unit Kerja Semua Unit'], search:true},
+  monitoring:{title:'Monitoring', sub:'Monitoring Kinerja dan Proyek', filters:['Tahun 2027','Periode Tahunan','Unit Kerja Semua Unit'], search:true},
+  output:    {title:'Performance Output', sub:'ICK Repository, EKB, dan Monitoring Proyek', filters:['Tahun 2026','Periode Tahunan'], search:true},
+  admin:     {title:'Administration', sub:'Pengaturan pengguna dan konfigurasi sistem', filters:[], search:false},
+};
+
+function buildFilters(list, withSearch){
+  const slot = document.getElementById('filterSlot');
+  slot.innerHTML = '';
+  if(withSearch){
+    const s = document.createElement('div');
+    s.className='search-box';
+    s.innerHTML = `<i data-lucide="search"></i><input type="text" placeholder="Cari KPI / ICK / Unit Kerja...">`;
+    slot.appendChild(s);
+  }
+  list.forEach(item=>{
+    const parts = item.split(' ');
+    const label = parts[0];
+    const val = parts.slice(1).join(' ');
+    if(label === 'Filter'){
+      const btn = document.createElement('div');
+      btn.className='dd-btn';
+      btn.style.cursor='pointer';
+      btn.innerHTML = `<i data-lucide="sliders-horizontal" style="width:14px;height:14px;"></i><span class="val" style="font-size:12.5px;">Filter Lainnya</span>`;
+      btn.onclick = ()=>showToast('Membuka filter lanjutan');
+      slot.appendChild(btn);
+      return;
+    }
+    const dd = document.createElement('div');
+    dd.className='dropdown';
+    dd.innerHTML = `
+      <div class="dd-btn" data-dd>
+        <div><span class="lbl">${label}</span><span class="val">${val}</span></div>
+        <i data-lucide="chevron-down"></i>
+      </div>
+      <div class="dd-menu">
+        <div>Pilihan 1</div><div>Pilihan 2</div><div>Pilihan 3</div>
+      </div>`;
+    slot.appendChild(dd);
+    const trigger = dd.querySelector('[data-dd]');
+    const menu = dd.querySelector('.dd-menu');
+    trigger.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      document.querySelectorAll('.dd-menu.open').forEach(m=>{ if(m!==menu) m.classList.remove('open');});
+      menu.classList.toggle('open');
+    });
+    menu.querySelectorAll('div').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        dd.querySelector('.val').textContent = opt.textContent;
+        menu.classList.remove('open');
+        showToast('Filter diperbarui: ' + opt.textContent);
+      });
+    });
+  });
+  lucide.createIcons();
+}
+
+function goPage(key){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+key).classList.add('active');
+
+  document.querySelectorAll('.nav-item[data-nav]').forEach(n=>n.classList.remove('active'));
+  const navEl = document.getElementById('nav'+key.charAt(0).toUpperCase()+key.slice(1));
+  if(navEl) navEl.classList.add('active');
+
+  const info = pages[key];
+  document.getElementById('pageTitle').textContent = info.title;
+  document.getElementById('pageSubtitle').textContent = info.sub;
+  buildFilters(info.filters, info.search);
+}
+
+document.getElementById('navDashboard').addEventListener('click', ()=>{
+  const sub = document.getElementById('subDashboard');
+  sub.classList.toggle('open');
+  document.getElementById('navDashboard').classList.toggle('expanded');
+  goPage('dashboard');
+});
+['navPlanning','navMonitoring','navOutput','navAdmin'].forEach(id=>{
+  document.getElementById(id).addEventListener('click', ()=>{
+    const key = id.replace('nav','').toLowerCase();
+    goPage(key);
+  });
+});
+document.querySelectorAll('#subDashboard a').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    document.querySelectorAll('#subDashboard a').forEach(x=>x.classList.remove('sub-active'));
+    a.classList.add('sub-active');
+    goPage('dashboard');
+    showToast('Menampilkan ' + a.textContent);
+  });
+});
+document.getElementById('helpBtn').addEventListener('click', ()=>showToast('Pusat bantuan akan segera hadir'));
+
+/* ---------- PROFILE / LOGOUT ---------- */
+const profileBtn = document.getElementById('profileBtn');
+const profileMenu = document.getElementById('profileMenu');
+profileBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  document.querySelectorAll('.dd-menu.open').forEach(m=>{ if(m!==profileMenu) m.classList.remove('open');});
+  profileMenu.classList.toggle('open');
+});
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  profileMenu.classList.remove('open');
+  document.body.classList.add('locked');
+  goPage('dashboard');
+});
+
+/* init filters for first page */
+buildFilters(pages.dashboard.filters, pages.dashboard.search);
+
+/* ---------- NOTIF / DROPDOWN GLOBAL CLOSE ---------- */
+const notifBtn = document.getElementById('notifBtn');
+const notifPanel = document.getElementById('notifPanel');
+notifBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  notifPanel.classList.toggle('open');
+});
+document.addEventListener('click', ()=>{
+  notifPanel.classList.remove('open');
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+});
+
+/* ---------- TOAST ---------- */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ---------- CHARTS ---------- */
+Chart.defaults.font.family = "'Inter', sans-serif";
+
+function makeTrendChart(ctx){
+  return new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul'],
+      datasets:[{
+        data:[68,74,70,80,77,86,90],
+        borderColor:'#3661f0',
+        backgroundColor:'rgba(54,97,240,0.08)',
+        borderWidth:2.5,
+        pointBackgroundColor:'#3661f0',
+        pointBorderColor:'#fff',
+        pointBorderWidth:2,
+        pointRadius:4,
+        pointHoverRadius:6,
+        tension:0.4,
+        fill:true,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{backgroundColor:'#0a1442', padding:10, cornerRadius:8, titleFont:{weight:700}, callbacks:{label:c=>c.parsed.y+'%'}}},
+      scales:{
+        y:{min:0,max:100, ticks:{stepSize:25, color:'#96a0bd', font:{size:10}}, grid:{color:'#eef0f8'}},
+        x:{ticks:{color:'#96a0bd', font:{size:10}}, grid:{display:false}}
+      }
+    }
+  });
+}
+makeTrendChart(document.getElementById('trendChart1'));
+makeTrendChart(document.getElementById('trendChart2'));
+
+new Chart(document.getElementById('donutApproval'), {
+  type:'doughnut',
+  data:{
+    labels:['Approved','Pending','Revision'],
+    datasets:[{ data:[392,58,30], backgroundColor:['#17b26a','#f5a524','#f04438'], borderWidth:0, spacing:2 }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'72%',
+    plugins:{legend:{display:false}, tooltip:{backgroundColor:'#0a1442', padding:10, cornerRadius:8}}
+  }
+});
+</script>
+</body>
+</html>
