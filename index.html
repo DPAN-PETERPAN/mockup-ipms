@@ -123,6 +123,23 @@
     font-size:14px;
   }
   .help-btn:hover{background:rgba(255,255,255,0.15);}
+  .peterpan-btn{
+    margin-top:10px;
+    background:linear-gradient(135deg,#f5a524,#f04438);
+    border:1px solid rgba(255,255,255,0.15);
+    color:#fff;
+    padding:12px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-weight:700;
+    font-size:14px;
+    transition:filter .15s ease, transform .15s ease;
+  }
+  .peterpan-btn:hover{filter:brightness(1.08); transform:translateY(-1px);}
+  .peterpan-btn svg{width:16px; height:16px;}
 
   /* ===== MAIN ===== */
   .main{flex:1; min-width:0; padding:28px 34px 60px; }
@@ -521,6 +538,9 @@
     </div>
 
   </nav>
+  <a class="peterpan-btn" id="peterpanBtn" href="https://app.powerbi.com/groups/d07692dc-9265-44e1-b13e-ff8f0e0e3913/reports/cb6d3336-0e27-48bc-9785-9357103ef72d/f0e53abc8ddab11aa51d?experience=power-bi&amp;bookmarkGuid=40cafd942204c442cdaa" target="_blank" rel="noopener noreferrer">
+    <i data-lucide="arrow-left-circle" style="width:16px;height:16px;"></i> Kembali ke PETERPAN
+  </a>
   <button class="help-btn" id="helpBtn"><i data-lucide="help-circle" style="width:16px;height:16px;"></i> Bantuan</button>
 </aside>
 
